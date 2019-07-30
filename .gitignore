@@ -10,7 +10,6 @@ out/
 *.zip
 *.xpi
 node_modules
-dist
 .tmp
 *.tgz
 yarn-error.log
