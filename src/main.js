@@ -8,6 +8,7 @@ import TextFinder from './textfinder';
 import XPathFinder from './xpathfinder';
 import SelectedRange from './selectedrange';
 import type { ClientOptions, TextSubject, XpathSubject } from './typedefs';
+import RangeUnhighlighter from "./rangeunhighlighter";
 
 export type { ClientOptions, TextSubject, XpathSubject };
 export {
@@ -20,4 +21,5 @@ export {
   getVerbose,
   setDebugging,
   getDebugging,
+  RangeUnhighlighter
 };
