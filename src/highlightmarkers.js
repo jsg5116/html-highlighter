@@ -23,7 +23,7 @@ class HighlightMarkers {
     this.markers = [];
   }
 
-  add(query: QuerySet, id: number, hit: TextRange): void {
+add(query: QuerySet, id: number, hit: TextRange): void {
     const offset = hit.start.marker.offset + hit.start.offset;
     let mid;
     let min = 0;

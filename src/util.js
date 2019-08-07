@@ -1,4 +1,5 @@
 // @flow
+import type { XpathSubject } from './typedefs';
 
 export type PromiseCapabilities = {| instance: Promise<*>, resolve: any => any, fail: any => any |};
 
@@ -21,4 +22,10 @@ function createPromiseCapabilities(): PromiseCapabilities {
   };
 }
 
-export { abstract, createPromiseCapabilities };
+export var highlightSubjects: Array<XpathSubject>
+
+function setHighlightSubjects(value) {
+  highlightSubjects = value.slice(0);
+}
+
+export { abstract, createPromiseCapabilities, setHighlightSubjects };

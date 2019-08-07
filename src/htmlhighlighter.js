@@ -6,14 +6,15 @@ import merge from 'merge';
 
 import globals from './globals';
 import logger from './logger';
-import type { ClientOptions, Options, Stats, QuerySet, QuerySubject } from './typedefs';
+import type { ClientOptions, Options, Stats, QuerySet, QuerySubject, XpathSubject } from './typedefs';
 import { Css } from './consts';
 import * as dom from './dom';
 import TextContent from './textcontent';
 import HighlightMarkers from './highlightmarkers';
 import Renderer, { QueryHighlighter, QueryUnhighlighter } from './renderer';
 import Cursor from './cursor';
-import { createPromiseCapabilities } from './util';
+import { createPromiseCapabilities, highlightSubjects, setHighlightSubjects } from './util';
+import { RangeUnhighlighter } from './main';
 
 /**
  * Main class of the HTML Highlighter module, which exposes an API enabling
@@ -136,6 +137,35 @@ class HtmlHighlighter extends EventEmitter {
     this.emit('refresh');
   }
 
+    /**
+   * Removes a highlight at the given index
+   *
+   */
+  removeHighlight(index: number): void {
+    var unhighlighter = new RangeUnhighlighter();
+    unhighlighter.undo(index);
+      if (highlightSubjects && highlightSubjects.length && highlightSubjects[index] != null) {
+        var copy = highlightSubjects.slice(0);
+        copy[index] = null;
+        setHighlightSubjects(copy);
+      }
+  }
+
+      /**
+   * Returns all subject data
+   *
+   */
+  getSubjects(): Array<XpathSubject> {
+    if (!highlightSubjects) {
+      setHighlightSubjects([]);
+    }
+    return highlightSubjects;
+  }
+
+  setSubjects(value) {
+    setHighlightSubjects(value);
+  }
+
   /**
    * Create a query set by the name and containing one or more queries
    *
@@ -219,6 +249,18 @@ class HtmlHighlighter extends EventEmitter {
       if (this.stats.highlight >= this.options.maxHighlight) {
         this.stats.highlight = 0;
       }
+
+      var highlightData = [];
+      if (highlightSubjects && highlightSubjects.length) {
+        highlightData = highlightSubjects.slice(0);
+      }
+
+      highlightData.push({
+        start: queries[0].start,
+        end: queries[0].end
+      });
+
+      setHighlightSubjects(highlightData);
 
       this.cursor.clear();
       this.emit('add', name, querySet, queries);

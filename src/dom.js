@@ -7,6 +7,8 @@
 // of (perceived) state.
 
 import { Css } from './consts';
+import RangeUnhighlighter from './rangeunhighlighter';
+import { highlightSubjects, setHighlightSubjects } from './util';
 
 export type Position = {| x: number, y: number |};
 export type ForEachNodeCallback = Node => boolean;
@@ -70,6 +72,25 @@ function isHighlightVisible(id: number): boolean {
 }
 
 function createHighlightElement(node: HTMLElement | Node, className: string): HTMLElement {
+  var classPrefix = "hh-highlight-";
+  let unhighlighter = new RangeUnhighlighter();
+  var classList = node.classList ? node.classList : node.parentElement.classList;
+
+  if (classList) {
+    for (var i = 0; i < classList.length; i++) {
+      if (classList[i].indexOf(classPrefix) !== -1 && classList[i].indexOf(className) === -1) {
+        var indexToRemove = parseInt(classList[i].substr(classPrefix.length), 10);
+        unhighlighter.undo(indexToRemove);
+        if (highlightSubjects && highlightSubjects[indexToRemove] != null) {
+          var copy = highlightSubjects.slice(0);
+          copy[indexToRemove] = null;
+          setHighlightSubjects(copy);
+          break;
+        }
+      }
+    };
+  }
+
   const span = document.createElement('span');
   span.className = className;
   (node.parentNode: any).insertBefore(span, node);
