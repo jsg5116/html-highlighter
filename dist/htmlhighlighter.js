@@ -794,7 +794,15 @@ function isHighlightVisible(id) {
 function createHighlightElement(node, className) {
   var classPrefix = "hh-highlight-";
   var unhighlighter = new _rangeunhighlighter2.default();
-  var classList = node.classList ? node.classList : node.parentElement.classList;
+  var classList;
+
+  if (node && node.classList) {
+    classList = node.classList;
+  } else if (node && node.parentElement && node.parentElement.classList) {
+    classList = node.parentElement.classList;
+  } else if (node && node.parentNode && node.parentNode.classList) {
+    classList = node.parentNode.classList;
+  }
 
   if (classList) {
     for (var i = 0; i < classList.length; i++) {
@@ -1862,6 +1870,15 @@ var RangeUnhighlighter = function () {
           var child = void 0;
           while ((child = el.childNodes[0]) != null) {
             el.parentNode.insertBefore(child, el);
+          }
+
+          // Create Element.remove() function if not exist
+          if (!('remove' in Element.prototype)) {
+            Element.prototype.remove = function () {
+              if (this.parentNode) {
+                this.parentNode.removeChild(this);
+              }
+            };
           }
 
           el.remove();

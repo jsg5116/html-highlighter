@@ -74,8 +74,18 @@ function isHighlightVisible(id: number): boolean {
 function createHighlightElement(node: HTMLElement | Node, className: string): HTMLElement {
   var classPrefix = "hh-highlight-";
   let unhighlighter = new RangeUnhighlighter();
-  var classList = node.classList ? node.classList : node.parentElement.classList;
-
+  var classList;
+  
+  if (node && node.classList) {
+    classList = node.classList;
+  }
+  else if (node && node.parentElement && node.parentElement.classList) {
+    classList = node.parentElement.classList;
+  }
+  else if (node && node.parentNode && node.parentNode.classList) {
+    classList = node.parentNode.classList;
+  }
+  
   if (classList) {
     for (var i = 0; i < classList.length; i++) {
       if (classList[i].indexOf(classPrefix) !== -1 && classList[i].indexOf(className) === -1) {
