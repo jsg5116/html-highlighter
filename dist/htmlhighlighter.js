@@ -5885,7 +5885,7 @@ var SelectedRange = function () {
       }
 
       var range;
-      if (sel.rangeCount) {
+      if (sel.rangeCount > 0) {
         range = sel.getRangeAt(0);
       }
 

@@ -41,10 +41,10 @@ class SelectedRange {
     }
 
     var range;
-    if (sel.rangeCount) {
+    if (sel.rangeCount > 0) {
       range = sel.getRangeAt(0);
     }
-    
+
     if (range == null) {
       return null;
     }
