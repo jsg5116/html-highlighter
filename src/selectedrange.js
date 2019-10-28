@@ -40,7 +40,11 @@ class SelectedRange {
       return null;
     }
 
-    const range = sel.getRangeAt(0);
+    var range;
+    if (sel.rangeCount) {
+      range = sel.getRangeAt(0);
+    }
+    
     if (range == null) {
       return null;
     }

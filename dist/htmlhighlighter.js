@@ -5884,7 +5884,11 @@ var SelectedRange = function () {
         return null;
       }
 
-      var range = sel.getRangeAt(0);
+      var range;
+      if (sel.rangeCount) {
+        range = sel.getRangeAt(0);
+      }
+
       if (range == null) {
         return null;
       }
